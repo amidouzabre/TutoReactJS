@@ -1,37 +1,22 @@
-import {useToggle} from "./hooks/useToggle.jsx";
-import {useIncrement} from "./hooks/useIncrement.jsx";
-import {useState} from "react";
-import {useDocumentTitle} from "./hooks/useDocumentTitle.js";
 import {Input} from "./components/forms/input.jsx";
+import {useFetch} from "./hooks/useFetch.js";
 
 
 function App() {
 
-  const [checked, toggleCheck] = useToggle()
-  const {count , increment, decrement} = useIncrement({
-    base: 0,
-    max: 10,
-    min: 0,
-    step: 1
-  })
-
-  const [name, setName] = useState('')
-useDocumentTitle(name ? `Editer   ${name}` : null)
+  const {loading, data, errors} = useFetch('https://jsonplaceholder.typicode.com/posts?_limit=10&_delay=2000')
 
   return <div>
-    <div>
-      <input type="checkbox" checked={checked} onChange={toggleCheck} />
-      {checked && "Je suis coché"}
-    </div>
-
-    <Input value={name} onChange={setName} label="Nom" />
-
-    <div>
-      Compteur : {count}
-      <button onClick={increment}>Incrementer</button>
-      <button onClick={decrement}>Decrementer</button>
-    </div>
-
+    {loading && <div className="spinner-border" role="status" >
+      <span className="visually-hidden">Loading...</span>
+    </div>}
+    {errors && <div className="alert alert-danger">{ errors.toString() }</div>}
+    {data && <div>
+        <ul>
+          { data.map(post => (<li key={post.id}>{post.title}</li>)) }
+        </ul>
+      </div>
+    }
   </div>
 
 }
