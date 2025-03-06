@@ -5,7 +5,7 @@ import { Input } from "./components/forms/input"
 
 function App() {
 
-  const [showInput, setshowInput] = useState(false)
+  const [showInput, setshowInput] = useState(true)
 
   return <div className="container my-3 stack">
      <Checkbox 
@@ -23,12 +23,35 @@ function App() {
 function EditTitle () {
   const [title, setTitle] = useState('')
   const [firstname, setFirstname] = useState('')
+  const [y, setY] = useState(0)
 
   useEffect(() => {
     document.title = title
   }, [title]);
 
+
+  useEffect(() => {
+
+    const handler = (e) => {
+      console.log("scroll")
+      setY(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handler)
+
+    // Netoyage addEventLisner
+    return () => {
+      window.removeEventListener('scroll', handler)
+    }
+
+  }, []);
+
+  
+
   return <div className="vstack gap-2">
+      <div>
+        Scroll : {y}
+      </div>
       <Input 
         placeholder = "Modifier le titre"
         value = {title}
@@ -41,6 +64,7 @@ function EditTitle () {
         onChange= {setFirstname}
       />
 
+      <div style={{height: '300vh'}}></div>
 
   </div>
 
