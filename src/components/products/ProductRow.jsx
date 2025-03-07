@@ -6,7 +6,11 @@ export function ProductRow ({product}) {
 
     const style = product.stocked ? undefined : {color: 'red'}
 
-    return <tr>
+    const handleClick = () => {
+        throw new Error('misclicked')
+    }
+
+    return <tr onClick={handleClick}>
         <td style={style}>{product.name}</td>
         <td>{product.price}</td>
     </tr>
